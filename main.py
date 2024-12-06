@@ -4,10 +4,12 @@ from pygame_menu.examples import create_example_window
 import logging
 from random import randrange
 from typing import Tuple, Any, Optional, List
-
+import threading
 from racer import start_racer
 from space_shooter import start_space_shooter
 from cv_gesture import start_gesture_control
+
+
 
 ABOUT = [f'pygame-menu {pygame_menu.__version__}',
          f'Author: {pygame_menu.__author__}',
@@ -102,7 +104,7 @@ def main_background() -> None:
     surface.fill((128, 0, 128))
 
 
-def main(test: bool = False) -> None:
+def start_pygame(test: bool = False) -> None:
     """
     Main program.
 
@@ -235,8 +237,6 @@ def main(test: bool = False) -> None:
         # Flip surface
         pygame.display.flip()
 
-        start_gesture_control()
-
         # At first loop returns
         if test:
             break
@@ -278,5 +278,12 @@ def _menu_set_cb_mode(val: bool) -> None:
         logging.warning(f"Ошибка переключения режима цветослабости: {e}")
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    pygame_thread = threading.Thread(target=start_pygame)
+    opencv_thread = threading.Thread(target=start_gesture_control)
+
+    pygame_thread.start()
+    opencv_thread.start()
+
+    pygame_thread.join()
+    opencv_thread.join()
