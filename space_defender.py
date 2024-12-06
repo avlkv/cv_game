@@ -55,7 +55,7 @@ def game_init():
         num_of_enemies, bulletX, bulletY, bulletX_change, bulletY_change, bullet_state, score_value, level_value, over_font
     screen = pygame.display.set_mode((800, 600))
     # Caption and Icon
-    pygame.display.set_caption('Space Invader')
+    pygame.display.set_caption('Космический защитник')
     pygame.display.set_icon(icon)
     # =======================================================================================================================================
     # Player
@@ -340,7 +340,7 @@ def show_score():
 
 
 # =======================================================================================================================================
-def start_space_shooter():
+def start_space_defender():
     import_game_files()
     game_init()
     Home_screen()

@@ -97,7 +97,7 @@ def game_init():
     Screen_Widht, Screen_Height = 700, 700
     screen = pygame.display.set_mode((Screen_Widht, Screen_Height))
     # Set Caption of the Game
-    pygame.display.set_caption('Traffic_racer_car')
+    pygame.display.set_caption('Гонщик')
 
 # ============================================================================
 

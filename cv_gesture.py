@@ -510,7 +510,9 @@ def gesture_control():
         prev_time = cur_time
         cv2.putText(Main_img, f'FPS:- {int(fps)}', (40, 40), Font_type, Font_size, (90, 140, 185), Font_thickness)
         # ======== Displaying the Main Image ===================================
-        cv2.imshow('Game Controller', Main_img)
+        title = 'test'.encode('utf-8').decode('latin-1')
+        # print(title)
+        cv2.imshow(title, Main_img)
 
         # sleep(0.1)
         # window = gw.getWindowsWithTitle('Game Controller')[0]  # Get the window by title

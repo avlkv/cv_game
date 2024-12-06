@@ -6,7 +6,7 @@ from random import randrange
 from typing import Tuple, Any, Optional, List
 import threading
 from racer import start_racer
-from space_shooter import start_space_shooter
+from space_defender import start_space_defender
 from cv_gesture import start_gesture_control
 import time
 import pygetwindow as gw
@@ -151,7 +151,7 @@ def start_pygame(test: bool = False) -> None:
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
     play_menu.add.button('Стрелок',  # When pressing return -> play(DIFFICULTY[0], font)
-                         start_space_shooter)
+                         start_space_defender)
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
     # play_menu.add.selector('Select difficulty ',
@@ -281,12 +281,41 @@ def synchronize_windows():
     while True:
         try:
             # Get the positions of the windows
-            pygame_window = gw.getWindowsWithTitle('Главное меню')[0]
-            opencv_window = gw.getWindowsWithTitle('Game Controller')[0]
+            menu_open = False
+            racer_open = False
+            space_shooter_open = False
+
+            # current_pygame_window = gw.getWindowsWithTitle('Главное меню')[0]
+
+            try:
+                current_pygame_window = gw.getWindowsWithTitle('Главное меню')[0]
+                menu_open = True
+            except:
+                menu_open = False
+
+            if not menu_open:
+                try:
+                 current_pygame_window = gw.getWindowsWithTitle('Гонщик')[0]
+                 racer_open = True
+                except:
+                 racer_open = False
+
+            if not (menu_open or racer_open):
+                try:
+                 current_pygame_window = gw.getWindowsWithTitle('Космический защитник')[0]
+                 space_shooter_open = True
+                except:
+                 space_shooter_open = False
+
+            if not (menu_open or racer_open or space_shooter_open):
+                print('no windows')
+                break
+
+            opencv_window = gw.getWindowsWithTitle('test')[0]
 
             # Calculate new positions for the OpenCV window
-            new_x = pygame_window.left + pygame_window.width + 1  # Offset to avoid overlap
-            new_y = pygame_window.top
+            new_x = current_pygame_window.left + current_pygame_window.width + 1  # Offset to avoid overlap
+            new_y = current_pygame_window.top
 
             # Move OpenCV window to new position if it's not already there
             if opencv_window.left != new_x or opencv_window.top != new_y:
