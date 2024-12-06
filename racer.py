@@ -270,8 +270,8 @@ def Home_screen():
     global screen, background_home, instruction_image
     home_run, Game_start, exitt, show_instructions = True, False, False, False
 
-    Game_run = button((255, 0, 0), 10, 600, 125, 75, text="Start")
-    Exit_but = button((255, 0, 0), 565, 600, 125, 75, text="Exit")
+    Game_run = button((255, 0, 0), 10, 600, 175, 125, text="Start")
+    Exit_but = button((255, 0, 0), 565, 600, 175, 125, text="Exit")
     Instruction_but = button((255, 0, 0), 290, 600, 125, 75, text="Help")
 
     while home_run:
