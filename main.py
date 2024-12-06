@@ -8,8 +8,8 @@ import threading
 from racer import start_racer
 from space_shooter import start_space_shooter
 from cv_gesture import start_gesture_control
-
-
+import time
+import pygetwindow as gw
 
 ABOUT = [f'pygame-menu {pygame_menu.__version__}',
          f'Author: {pygame_menu.__author__}',
@@ -244,7 +244,7 @@ def start_pygame(test: bool = False) -> None:
 
 def create_menu(theme):
     menu = pygame_menu.Menu('Welcome', 600, 400, theme=theme)
-    menu.add.button('Toggle Theme', lambda: toggle_theme(menu))
+    # menu.add.button('Toggle Theme', lambda: toggle_theme(menu))
     menu.add.button('Quit', pygame_menu.events.EXIT)
     return menu
 
@@ -277,13 +277,41 @@ def _menu_set_cb_mode(val: bool) -> None:
     except Exception as e:
         logging.warning(f"Ошибка переключения режима цветослабости: {e}")
 
+def synchronize_windows():
+    while True:
+        try:
+            # Get the positions of the windows
+            pygame_window = gw.getWindowsWithTitle('Главное меню')[0]
+            opencv_window = gw.getWindowsWithTitle('Game Controller')[0]
+
+            # Calculate new positions for the OpenCV window
+            new_x = pygame_window.left + pygame_window.width + 1  # Offset to avoid overlap
+            new_y = pygame_window.top
+
+            # Move OpenCV window to new position if it's not already there
+            if opencv_window.left != new_x or opencv_window.top != new_y:
+                opencv_window.moveTo(new_x, new_y)
+
+        except IndexError:
+            # If windows are not found, break the loop
+            break
+
+        time.sleep(0.1)  # Sleep briefly to reduce CPU usage
 
 if __name__ == "__main__":
     pygame_thread = threading.Thread(target=start_pygame)
     opencv_thread = threading.Thread(target=start_gesture_control)
+    print('running')
 
     pygame_thread.start()
     opencv_thread.start()
+    print('started')
+
+    time.sleep(3) # Ожидание запуска камеры
+
+    sync_thread = threading.Thread(target=synchronize_windows)
+    sync_thread.start()
 
     pygame_thread.join()
     opencv_thread.join()
+    sync_thread.join()
