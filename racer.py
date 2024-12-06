@@ -41,7 +41,7 @@ def import_assets():
     global playerImg, Car1, Car2, Car3, Car4, Car5, screen, path, background_home, background, road, Road2,\
         instruction_image, crash, crash_sound
     # Set the Directory path of the files, to get all the required assets for the game
-    path = 'C:\\Users\\Honor\\PycharmProjects\\cv_game_20241204\\Assets\\Racer\\'
+    path = 'C:\\Users\\Honor\\Documents\\cv_game\\Assets\\Racer\\'
     try:
         # Game Images
         background_home = pygame.image.load(join(
