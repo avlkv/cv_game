@@ -7,6 +7,7 @@ from typing import Tuple, Any, Optional, List
 
 from racer import start_racer
 from space_shooter import start_space_shooter
+from cv_gesture import start_gesture_control
 
 ABOUT = [f'pygame-menu {pygame_menu.__version__}',
          f'Author: {pygame_menu.__author__}',
@@ -233,6 +234,8 @@ def main(test: bool = False) -> None:
 
         # Flip surface
         pygame.display.flip()
+
+        start_gesture_control()
 
         # At first loop returns
         if test:
