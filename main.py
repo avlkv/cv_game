@@ -250,14 +250,14 @@ def create_menu(theme):
 
 
 # Function to toggle theme
-def toggle_theme(val, current_menu):
-    global current_theme, menu
-    if val:
-        # current_theme = 'dark'
-        menu = create_menu(theme_dark)  # Create new menu with dark theme
-    else:
-        # current_theme = 'default'
-        menu = create_menu(theme_default)  # Create new menu with default theme
+# def toggle_theme(val, current_menu):
+#     global current_theme, menu
+#     if val:
+#         # current_theme = 'dark'
+#         menu = create_menu(theme_dark)  # Create new menu with dark theme
+#     else:
+#         # current_theme = 'default'
+#         menu = create_menu(theme_default)  # Create new menu with default theme
 
 
 def _menu_set_cb_mode(val: bool) -> None:
@@ -265,14 +265,14 @@ def _menu_set_cb_mode(val: bool) -> None:
         if val:
             CB_MODE = True
             print(CB_MODE)
-            toggle_theme(val, main_menu)
-            toggle_theme(val, about_menu)
+            # toggle_theme(val, main_menu)
+            # toggle_theme(val, about_menu)
             logging.info('Включен режим цветослабости')
         else:
             CB_MODE = False
             print(CB_MODE)
-            toggle_theme(val, main_menu)
-            toggle_theme(val, about_menu)
+            # toggle_theme(val, main_menu)
+            # toggle_theme(val, about_menu)
             logging.info('Выключен режим цветослабости')
     except Exception as e:
         logging.warning(f"Ошибка переключения режима цветослабости: {e}")
