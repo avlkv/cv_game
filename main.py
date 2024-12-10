@@ -150,7 +150,7 @@ def start_pygame(test: bool = False) -> None:
                          start_racer)
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
-    play_menu.add.button('Стрелок',  # When pressing return -> play(DIFFICULTY[0], font)
+    play_menu.add.button('Космический защитник',  # When pressing return -> play(DIFFICULTY[0], font)
                          start_space_defender)
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
@@ -311,7 +311,7 @@ def synchronize_windows():
                 print('no windows')
                 break
 
-            opencv_window = gw.getWindowsWithTitle('test')[0]
+            opencv_window = gw.getWindowsWithTitle('1')[0]
 
             # Calculate new positions for the OpenCV window
             new_x = current_pygame_window.left + current_pygame_window.width + 1  # Offset to avoid overlap

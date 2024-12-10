@@ -8,6 +8,7 @@ from pygame import K_RIGHT, K_LEFT, K_SPACE, K_ESCAPE, K_a, K_d, KEYUP, KEYDOWN,
 
 # ==  Button Class  ==========================================================
 class button():
+
     """ Used to Create a button on the screen """
 
     def __init__(self, colour, x, y, width, height, text=" ", font_size=30, font_colour=(0, 0, 0)):
@@ -38,8 +39,7 @@ class button():
 # == Functions Used to Play game ==============================================
 def import_assets():
     """Import all the Required assets for the game"""
-    global playerImg, Car1, Car2, Car3, Car4, Car5, screen, path, background_home, background, road, Road2,\
-        instruction_image, crash, crash_sound
+    global playerImg, Car1, Car2, Car3, Car4, Car5, screen, path, background_home, background, help_bk, road, Road2, crash, crash_sound
     # Set the Directory path of the files, to get all the required assets for the game
     path = 'C:\\Users\\Honor\\Documents\\cv_game\\Assets\\Racer\\'
     try:
@@ -70,9 +70,8 @@ def import_assets():
             f"{path}", "road4lane.png"))                  # Road Image 1
         Road2 = pygame.image.load(join(
             f"{path}", "road4lane.png"))                 # Road Image 1
-        instruction_image = pygame.image.load(join(
-            f"{path}",'help_bk.png')) # Replace with your image path
-        instruction_image = pygame.transform.scale(instruction_image, (474, 700))
+        help_bk = pygame.image.load(join(
+            f"{path}", "help_bk.png"))                 # Road Image 1
         # Icon of the Game
         icon = pygame.image.load(join(f"{path}", 'Icon.png'))
         # Set Icon of the Game
@@ -97,7 +96,7 @@ def game_init():
     Screen_Widht, Screen_Height = 700, 700
     screen = pygame.display.set_mode((Screen_Widht, Screen_Height))
     # Set Caption of the Game
-    pygame.display.set_caption('Гонщик')
+    pygame.display.set_caption('Traffic_racer_car')
 
 # ============================================================================
 
@@ -126,11 +125,143 @@ def show_score():
     """Shows Score and Level on the Screen"""
     text_colour = (220, 47, 2)
     score_font = pygame.font.SysFont('benzin extrabold', 25, italic=True)
-    score = score_font.render("Score : " + str(score_value), True, text_colour)
-    screen.blit(score, (190, 0))
-    level = score_font.render(f"Level:- {level_value}", True, text_colour)
-    screen.blit(level, (420, 0))
+    score = score_font.render("Счет : " + str(score_value), True, text_colour)
+    screen.blit(score, (180, 0))
+    level = score_font.render(f"Уровень: {level_value}", True, text_colour)
+    screen.blit(level, (400, 0))
 
+# ============================================================================
+
+def Game_screen():
+    """Play Screen of the Game"""
+    global playerImg, Car1, Car2, Car3, Car4, Car5, other_cars, screen, playerX, playerY, playerX_change, score_value, level_value, cars_start_X, cars_start_y, background, road, Road2, crash, crash_sound, Screen_Widht, Screen_Height
+    Game_run_screen, Finnish, Exitt, home_start = True, False, False, False
+    speed_of_car, playerx_varchange, road_Y = 2, 5, 30
+    # = Screen Top Part ======================================================
+    # Top Screen-Part colour
+    top_colour = (241, 250, 238)
+    Home_Button = button(top_colour, 5, 2, 80, 25,
+                         text="Домой", font_size=20)     # Home Button
+    Exit_Button = button(top_colour, 615, 2, 80, 25,
+                         text="Выйти", font_size=20)   # Exit Button
+
+    Enemy_car = Enemy_car_coordinate()
+
+    # Play the Back-ground Music
+    mixer.music.load(join(f"{path}", "Assets\\back_music.wav"))
+    mixer.music.play(-1)
+
+    # Enemy Car's Images, it's X & Y Co-ordinates List, with First Enemy car too
+    car_enemy, car_enemy_x, car_enemy_y = [
+        Enemy_car[0]], [Enemy_car[1]], [Enemy_car[2]]
+
+    while Game_run_screen:
+        score_value_in = 0
+        # == Roads Y Co-ordinate ==========================
+        Road2_y = road_Y - Road2.get_height()
+        road_Y = road_Y % 620
+        # == Screen Background ===========================
+        pygame.draw.rect(screen, (94, 100, 114), [78, 0, 548, 680])
+        # Background Image
+        screen.blit(background, (0, 30))
+        # Road Image 1
+        screen.blit(road, (78, road_Y))
+        # Road Image 2
+        screen.blit(Road2, (78, Road2_y))
+
+        # =====================================================================
+        home_Button_button_active = Home_Button.hover(pygame.mouse.get_pos())
+        exit_Button_button_active = Exit_Button.hover(pygame.mouse.get_pos())
+
+        Home_Button.font_colour = (
+            235, 210, 5) if home_Button_button_active else (0, 0, 0)
+        Exit_Button.font_colour = (
+            255, 0, 0) if exit_Button_button_active else (0, 0, 0)
+        # =====================================================================
+
+        # Обработка событий в игровом цикле
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # Закрытие игры
+                Game_run_screen, Exitt = False, True
+
+            if event.type == pygame.MOUSEBUTTONDOWN:  # Клик мышью
+                if home_Button_button_active:
+                    Game_run_screen, home_start = False, True
+                if exit_Button_button_active:
+                    Game_run_screen, Exitt = False, True
+
+
+
+        if event.type == MOUSEBUTTONDOWN:          # Button's Click
+            if home_Button_button_active:
+                Game_run_screen, home_start = False, True
+            if exit_Button_button_active:
+                Game_run_screen, Exitt = False, True
+        # =====================================================================
+        playerX += playerX_change
+        # If Car Reaches at Left/Right Side of the Road stop moving car Left/Right
+        if playerX <= 130:
+            playerX = 130
+        elif playerX >= 515:
+            playerX = 515
+        # ==== Showing Non-Player on the Screen and check for collision with them ====
+        for x in range(len(car_enemy)):
+            # => Showing Non Player car on the Screen
+            screen.blit(car_enemy[x], (car_enemy_x[x], car_enemy_y[x]))
+            # ==  If Car not collided and at bottom of the screen  ===================
+            if car_enemy_y[x] >= 650:
+                car_enemy[x], car_enemy_x[x], car_enemy_y[x] = Enemy_car_coordinate()
+                score_value_in += 1
+                car_enemy_x.append(car_enemy_x[x])
+                car_enemy_y.append(car_enemy_y[x])
+                if score_value % 5 == 0 and score_value != 0:
+                    level_value += 1
+                    speed_of_car += 1
+                    playerx_varchange += 2
+                    if level_value < 3:
+                        Enemy_car0 = Enemy_car_coordinate()
+                        car_enemy.append(Enemy_car0[0])
+                        car_enemy_x.append(Enemy_car0[1])
+                        car_enemy_y.append(Enemy_car0[2])
+            # ======================================================================
+            # => Check for Collision
+            Collild = isCollision(
+                car_enemy_x[x], car_enemy_y[x], playerX, playerY)
+            if Collild:
+                screen.blit(crash, ((Screen_Widht/2 - crash.get_width()/2),
+                            (Screen_Height/2 - (crash.get_height()+1 / 2))))
+                crash_sound.play()
+                Finnish = True
+            car_enemy_y[x] += speed_of_car
+        if score_value_in >= 1:
+            score_value += 1
+            score_value_in = 0
+        # ==============================================
+        # Showing Player on the Screen
+        screen.blit(playerImg, (playerX, playerY))
+        # Rectangle at the Top of the screens
+        pygame.draw.rect(screen, top_colour, [0, 0, 700, 30])
+        # Blitting Home Button on the screen
+        Home_Button.draw(screen)
+        # Blitting Exit Button on the screen
+        Exit_Button.draw(screen)
+        # Show Score on the Top
+        show_score()
+        # Rectangle at the Bottom of the screen
+        pygame.draw.rect(screen, (145, 124, 111), [0, 680, 700, 50])
+        road_Y += speed_of_car                                      # Scrooling Road
+        # =====================================================================
+        pygame.display.update()
+        # =====================================================================
+        if Finnish:  # => If car's had collided then Game get's Finished
+            playerX_change = 0
+            sleep(1)
+            score_value, level_value = 0, 1
+            Game_run_screen, home_start = False, True
+        if home_start:
+            Home_screen()
+        if Exitt:
+            quit()
 # ============================================================================
 def Game_screen():
     """Play Screen of the Game"""
@@ -141,9 +272,9 @@ def Game_screen():
     # Top Screen-Part colour
     top_colour = (241, 250, 238)
     Home_Button = button(top_colour, 5, 2, 80, 25,
-                         text="Home", font_size=20)     # Home Button
+                         text="Назад", font_size=20)     # Home Button
     Exit_Button = button(top_colour, 615, 2, 80, 25,
-                         text="Exit", font_size=20)   # Exit Button
+                         text="Выход", font_size=20)   # Exit Button
 
     Enemy_car = Enemy_car_coordinate()
 
@@ -261,7 +392,7 @@ def Game_screen():
         if home_start:
             Home_screen()
         if Exitt:
-            return
+            quit()
 
 
 
@@ -270,9 +401,9 @@ def Home_screen():
     global screen, background_home, instruction_image
     home_run, Game_start, exitt, show_instructions = True, False, False, False
 
-    Game_run = button((255, 0, 0), 10, 600, 175, 125, text="Start")
-    Exit_but = button((255, 0, 0), 565, 600, 175, 125, text="Exit")
-    Instruction_but = button((255, 0, 0), 290, 600, 125, 75, text="Help")
+    Game_run = button((255, 0, 0), 15, 600, 130, 75, text="Старт")
+    Exit_but = button((255, 0, 0), 550, 600, 140, 75, text="Выйти")
+    Instruction_but = button((255, 0, 0), 260, 600, 180, 75, text="Помощь")
 
     while home_run:
         screen.fill((123, 70, 156))
@@ -315,11 +446,12 @@ def Home_screen():
         if show_instructions:
             # Display instruction image
             screen.fill((176, 176, 176))
-
+            # instruction_image = pygame.image.load('help_bk.png')  # Replace with your image path
+            instruction_image = pygame.transform.scale(help_bk, (474, 700))
             screen.blit(instruction_image, (115, 0))
 
             # Create "Back" button
-            Back_but = button((255, 0, 0), 290, 600, 125, 75, text="Back")
+            Back_but = button((255, 0, 0), 282, 600, 140, 75, text="Назад")
             pygame.draw.rect(screen, (18, 18, 18), (270, 588, 164, 100))
             Back_but.draw(screen)
 
@@ -348,7 +480,7 @@ def Home_screen():
         if Game_start:
             Game_screen()
         if exitt:
-            return
+            quit()
 
 # ============================================================================
 def start_racer():

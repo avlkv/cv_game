@@ -510,7 +510,7 @@ def gesture_control():
         prev_time = cur_time
         cv2.putText(Main_img, f'FPS:- {int(fps)}', (40, 40), Font_type, Font_size, (90, 140, 185), Font_thickness)
         # ======== Displaying the Main Image ===================================
-        title = 'test'.encode('utf-8').decode('latin-1')
+        title = '1' # .encode('utf-8').decode('windows-1251')
         # print(title)
         cv2.imshow(title, Main_img)
 
