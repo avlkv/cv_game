@@ -22,6 +22,7 @@ WINDOW_SIZE = (640, 480)
 clock: Optional['pygame.time.Clock'] = None
 main_menu: Optional['pygame_menu.Menu'] = None
 about_menu: Optional['pygame_menu.Menu'] = None
+play_menu: Optional['pygame_menu.Menu'] = None
 surface: Optional['pygame.Surface'] = None
 
 def play_function(difficulty: List, font: 'pygame.font.Font', test: bool = False) -> None:
@@ -38,7 +39,9 @@ def play_function(difficulty: List, font: 'pygame.font.Font', test: bool = False
 
     # Define globals
     global main_menu
+    global play_menu
     global clock
+    global CB_MODE
 
     if difficulty == 'EASY':
         f = font.render('Playing as a baby (easy)', True, (255, 255, 255))
@@ -84,7 +87,13 @@ def play_function(difficulty: List, font: 'pygame.font.Font', test: bool = False
             main_menu.update(events)
 
         # Continue playing
-        surface.fill(bg_color)
+        # surface.fill(bg_color)
+
+        # if CB_MODE:
+        #     surface.fill((0, 0, 0))
+        # else:
+        #     surface.fill((128, 0, 128))
+
         surface.blit(f, (int((WINDOW_SIZE[0] - f.get_width()) / 2),
                          int(WINDOW_SIZE[1] / 2 - f.get_height())))
         surface.blit(f_esc, (int((WINDOW_SIZE[0] - f_esc.get_width()) / 2),
@@ -101,7 +110,11 @@ def main_background() -> None:
     Function used by menus, draw on background while menu is active.
     """
     global surface
-    surface.fill((128, 0, 128))
+    # print(CB_MODE)
+    if CB_MODE:
+        surface.fill((128, 82, 0))
+    else:
+        surface.fill((128, 0, 128))
 
 
 def start_pygame(test: bool = False) -> None:
@@ -116,6 +129,8 @@ def start_pygame(test: bool = False) -> None:
     # -------------------------------------------------------------------------
     global clock
     global main_menu
+    global about_menu
+    global play_menu
     global surface
 
     # -------------------------------------------------------------------------
@@ -133,25 +148,27 @@ def start_pygame(test: bool = False) -> None:
         width=WINDOW_SIZE[0] * 0.75
     )
 
-    submenu_theme = pygame_menu.themes.THEME_DEFAULT.copy()
-
-    submenu_theme.widget_font_size = 15
-    play_submenu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] * 0.5,
-        theme=submenu_theme,
-        title='Submenu',
-        width=WINDOW_SIZE[0] * 0.7
-    )
-    for i in range(30):
-        play_submenu.add.button(f'Back {i}', pygame_menu.events.BACK)
-    play_submenu.add.button('Return to main menu', pygame_menu.events.RESET)
+    # submenu_theme = pygame_menu.themes.THEME_DEFAULT.copy()
+    #
+    # submenu_theme.widget_font_size = 15
+    # play_submenu = pygame_menu.Menu(
+    #     height=WINDOW_SIZE[1] * 0.5,
+    #     theme=submenu_theme,
+    #     title='Submenu',
+    #     width=WINDOW_SIZE[0] * 0.7
+    # )
+    # for i in range(30):
+    #     play_submenu.add.button(f'Back {i}', pygame_menu.events.BACK)
+    # play_submenu.add.button('Return to main menu', pygame_menu.events.RESET)
 
     play_menu.add.button('Гонщик',  # When pressing return -> play(DIFFICULTY[0], font)
-                         start_racer)
+                         start_racer,
+                         font_name = 'arialblack')
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
     play_menu.add.button('Космический защитник',  # When pressing return -> play(DIFFICULTY[0], font)
-                         start_space_defender)
+                         start_space_defender,
+                         font_name = 'arialblack')
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
     # play_menu.add.selector('Select difficulty ',
@@ -161,19 +178,20 @@ def start_pygame(test: bool = False) -> None:
     #                        onchange=change_difficulty,
     #                        selector_id='select_difficulty')
     # play_menu.add.button('Another menu', play_submenu)
-    play_menu.add.button('Главное меню', pygame_menu.events.BACK)
+    play_menu.add.button('Главное меню', pygame_menu.events.BACK,
+                         font_name = 'arialblack')
 
     # -------------------------------------------------------------------------
     # Create menus:About
     # -------------------------------------------------------------------------
-    about_theme = pygame_menu.themes.THEME_BLUE.copy()
+    about_theme = pygame_menu.themes.THEME_DEFAULT.copy()
     about_theme.widget_margin = (0, 0)
 
     about_menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] * 0.8,
+        height=WINDOW_SIZE[1] * 0.9,
         theme=about_theme,
         title='Настройки',
-        width=WINDOW_SIZE[0] * 0.8
+        width=WINDOW_SIZE[0] * 0.9
     )
 
     # for m in ABOUT:
@@ -185,9 +203,11 @@ def start_pygame(test: bool = False) -> None:
         default=False,
         width=120,
         state_text=('Выкл', 'Вкл'),
-        toggleswitch_id="CB_MODE"
+        toggleswitch_id="CB_MODE",
+        font_name = 'arialblack'
     )
-    about_menu.add.button('Главное меню', pygame_menu.events.BACK)
+    about_menu.add.button('Главное меню', pygame_menu.events.BACK,
+                         font_name = 'arialblack')
 
     # -------------------------------------------------------------------------
     # Create menus: Main
@@ -195,16 +215,19 @@ def start_pygame(test: bool = False) -> None:
     main_theme = pygame_menu.themes.THEME_DEFAULT.copy()
 
     main_menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] * 0.6,
+        height=WINDOW_SIZE[1] * 0.7,
         theme=main_theme,
         title='Главное меню',
-        width=WINDOW_SIZE[0] * 0.6
+        width=WINDOW_SIZE[0] * 0.7
     )
 
-    main_menu.add.button('Играть!', play_menu)
-    main_menu.add.button('Настройки', about_menu)
+    main_menu.add.button('Играть!', play_menu,
+                         font_name = 'arialblack')
+    main_menu.add.button('Настройки', about_menu,
+                         font_name = 'arialblack')
 
-    main_menu.add.button('Выход', pygame_menu.events.EXIT)
+    main_menu.add.button('Выход', pygame_menu.events.EXIT,
+                         font_name = 'arialblack')
 
     # -------------------------------------------------------------------------
     # Main loop
@@ -242,11 +265,11 @@ def start_pygame(test: bool = False) -> None:
             break
 
 
-def create_menu(theme):
-    menu = pygame_menu.Menu('Welcome', 600, 400, theme=theme)
-    # menu.add.button('Toggle Theme', lambda: toggle_theme(menu))
-    menu.add.button('Quit', pygame_menu.events.EXIT)
-    return menu
+# def create_menu(theme):
+#     menu = pygame_menu.Menu('Welcome', 600, 400, theme=theme)
+#     # menu.add.button('Toggle Theme', lambda: toggle_theme(menu))
+#     menu.add.button('Quit', pygame_menu.events.EXIT)
+#     return menu
 
 
 # Function to toggle theme
@@ -258,24 +281,37 @@ def create_menu(theme):
 #     else:
 #         # current_theme = 'default'
 #         menu = create_menu(theme_default)  # Create new menu with default theme
+def change_color(menu):
+    if CB_MODE:
+        menu_color = (255, 165, 0) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
+        text_color = (0, 0, 255)
+    else:
+        menu_color = (220, 220, 220) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
+        text_color = (70, 70, 70)
+    menu.get_scrollarea().update_area_color(menu_color)
+    for widget in menu.get_widgets():
+        if isinstance(widget, pygame_menu.widgets.Button) or isinstance(widget, pygame_menu.widgets.ToggleSwitch):
+            widget.set_font('arialblack', 30, text_color, text_color, text_color, (0, 0, 0), menu_color)  # Set font name, size, normal color, selected color, readonly color, background color
 
+    # surface.fill((100, 100, 100))
 
 def _menu_set_cb_mode(val: bool) -> None:
     try:
+        global CB_MODE
         if val:
             CB_MODE = True
-            print(CB_MODE)
-            # toggle_theme(val, main_menu)
-            # toggle_theme(val, about_menu)
+            change_color(main_menu)
+            change_color(about_menu)
+            change_color(play_menu)
             logging.info('Включен режим цветослабости')
         else:
             CB_MODE = False
-            print(CB_MODE)
-            # toggle_theme(val, main_menu)
-            # toggle_theme(val, about_menu)
+            change_color(main_menu)
+            change_color(about_menu)
+            change_color(play_menu)
             logging.info('Выключен режим цветослабости')
-    except Exception as e:
-        logging.warning(f"Ошибка переключения режима цветослабости: {e}")
+    except Exception:
+        logging.exception(f"Ошибка переключения режима цветослабости")
 
 def synchronize_windows():
     while True:
@@ -328,19 +364,26 @@ def synchronize_windows():
         time.sleep(0.1)  # Sleep briefly to reduce CPU usage
 
 if __name__ == "__main__":
-    pygame_thread = threading.Thread(target=start_pygame)
-    opencv_thread = threading.Thread(target=start_gesture_control)
-    print('running')
 
-    pygame_thread.start()
-    opencv_thread.start()
-    print('started')
+    open_cv = False
+    if open_cv:
+        pygame_thread = threading.Thread(target=start_pygame)
+        opencv_thread = threading.Thread(target=start_gesture_control)
+        print('running')
 
-    time.sleep(3) # Ожидание запуска камеры
+        pygame_thread.start()
+        opencv_thread.start()
+        print('started')
 
-    sync_thread = threading.Thread(target=synchronize_windows)
-    sync_thread.start()
+        time.sleep(3) # Ожидание запуска камеры
 
-    pygame_thread.join()
-    opencv_thread.join()
-    sync_thread.join()
+        sync_thread = threading.Thread(target=synchronize_windows)
+        sync_thread.start()
+
+        pygame_thread.join()
+        opencv_thread.join()
+        sync_thread.join()
+    else:
+        pygame_thread = threading.Thread(target=start_pygame)
+        pygame_thread.start()
+        pygame_thread.join()

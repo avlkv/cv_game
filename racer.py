@@ -53,9 +53,9 @@ def import_assets():
             f"{path}", "carcrash.png"))                  # Car Crash Image
         # Car Crash Sound
         crash_sound = mixer.Sound(join(f"{path}", "crash.wav"))
-        mixer.music.load(join(f"{path}", "back_music.wav"))
+        # mixer.music.load(join(f"{path}", "back_music.wav"))
         Car1 = pygame.image.load(join(
-            f"{path}", "car02.png"))                      # Other Car's
+            f"{path}", "blue_car.png"))                      # Other Car's
         Car2 = pygame.image.load(join(
             f"{path}", "car03.png"))                      # Other Car's
         Car3 = pygame.image.load(join(
@@ -76,7 +76,7 @@ def import_assets():
         icon = pygame.image.load(join(f"{path}", 'Icon.png'))
         # Set Icon of the Game
         pygame.display.set_icon(icon)
-        music = mixer.music.load(join(f"{path}", "back_music.wav"))
+        # music = mixer.music.load(join(f"{path}", "back_music.wav"))
     except Exception as e:
         print("! Unable to load game-asset-files !")
         print(e)
@@ -149,7 +149,7 @@ def Game_screen():
 
     # Play the Back-ground Music
     mixer.music.load(join(f"{path}", "Assets\\back_music.wav"))
-    mixer.music.play(-1)
+    mixer.music.play(0)
 
     # Enemy Car's Images, it's X & Y Co-ordinates List, with First Enemy car too
     car_enemy, car_enemy_x, car_enemy_y = [
