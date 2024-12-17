@@ -8,17 +8,32 @@ from random import randint
 from math import sqrt, pow
 
 # Intialize the pygame
-init()
+# init()
 # =======================================================================================================================================
-# path to files/assets
-path = "C:\\Users\\Honor\\Documents\\cv_game\\Assets\\Space_Shooter\\"
 
 
+
 # =======================================================================================================================================
-def import_game_files():
+def import_game_files(CB_MODE):
     """Returns True if all the required images and sound effect are imported and available for the game"""
-    global path, bulletImg, bulletSound, background_Game, background_home, background_over, enemy_Img, explosionSound, icon, playerImg
+    global path, bulletImg, bulletSound, background_Game, background_home, background_over, enemy_Img, explosionSound, icon, playerImg, music
+    path = "C:\\Users\\Honor\\Documents\\cv_game\\Assets\\Space_defender\\"
     try:
+        # SOUNDS
+        # Explosion Sounds effect
+        # mixer.Sound(join(f"{path}", 'explosion.wav'))
+        # Bullet/Laser Fired Sound effect
+        bulletSound = mixer.Sound(join(f"{path}", 'laser.wav'))
+        # Sound playing in the Background
+        music = mixer.Sound(join(f"{path}", "background.wav"))
+        explosionSound = mixer.Sound(join(f"{path}", 'explosion.wav'))
+        # mixer.music.play(-1)
+
+        if CB_MODE:
+            path = path + 'colorblind\\'
+        else:
+            path = path + 'normal\\'
+
         # Background of the Main/Welcome/Home Screen
         background_home = pygame.image.load(join(f"{path}", 'background_home.png'))
         # Background of the Game Screen
@@ -33,16 +48,11 @@ def import_game_files():
         enemy_Img = pygame.image.load(join(f"{path}", 'enemy.png'))
         # Bullet
         bulletImg = pygame.image.load(join(f"{path}", 'bullet.png'))
-        # Explosion Sounds effect
-        mixer.Sound(join(f"{path}", 'explosion.wav'))
-        # Bullet/Laser Fired Sound effect
-        bulletSound = mixer.Sound(join(f"{path}", 'laser.wav'))
-        # Sound playing in the Background
-        mixer.music.load(join(f"{path}", "background.wav"))
-        explosionSound = mixer.Sound(join(f"{path}", 'explosion.wav'))
-        mixer.music.play(-1)
+
         return True
-    except Exception:
+    except Exception as e:
+        print("! Unable to load game-asset-files !")
+        print(e)
         return False
 
 
@@ -51,7 +61,7 @@ def import_game_files():
 # =======================================================================================================================================
 # create the screen
 def game_init():
-    global screen, playerX, playerY, playerX_change, playerx_varchange, enemyY_change, enemyx_changevar,\
+    global screen, icon, playerX, playerY, playerX_change, playerx_varchange, enemyY_change, enemyx_changevar,\
         num_of_enemies, bulletX, bulletY, bulletX_change, bulletY_change, bullet_state, score_value, level_value, over_font
     screen = pygame.display.set_mode((800, 600))
     # Caption and Icon
@@ -162,8 +172,9 @@ def Home_screen():
 # =======================================================================================================================================
 def Game_screen():
     """This the Game Window in which the user enjoys the game"""
-    global game_run, playerX, playerY, playerX_change, bulletX, bulletY, bullet_state, enemyX, enemyY, score_value, level_value, enemyx_changevar, bulletY_change, playerx_varchange, enemyImg, enemyX, enemyY, enemyX_change, start_game
+    global music, game_run, playerX, playerY, playerX_change, bulletX, bulletY, bullet_state, enemyX, enemyY, score_value, level_value, enemyx_changevar, bulletY_change, playerx_varchange, enemyImg, enemyX, enemyY, enemyX_change, start_game
     if start_game:  # Enemies
+        music.play(-1)
         enemyImg = []  # Image
         # X & Y Co-ordinate , Change in X Co-ordinates of each enemy
         enemyX, enemyY, enemyX_change = [], [], []
@@ -257,6 +268,7 @@ def Game_screen():
         if home_screen:
             Home_screen()
         if Game_over:
+            music.stop()
             game_over_screen()
 
 
@@ -264,7 +276,7 @@ def Game_screen():
 
 def game_over_screen():
     """When user loses the game, this Screen appears"""
-    global screen, score_value
+    global screen, score_value, music
     game_over_run, hoome_screen = True, False
     retry_but = button((255, 155, 45), 180, 530, 100, 50, text="Home")
     Exit_butun = button((255, 0, 0), 520, 530, 100, 50, text="Exit")
@@ -299,6 +311,7 @@ def game_over_screen():
                     score_value = 0
                 if exti_but_active:
                     game_over_run = False
+                    music.stop()
                     quit()
         # =====================================================================
         pygame.display.update()
@@ -340,7 +353,7 @@ def show_score():
 
 
 # =======================================================================================================================================
-def start_space_defender():
-    import_game_files()
+def start_space_defender(CB_MODE):
+    import_game_files(CB_MODE)
     game_init()
     Home_screen()

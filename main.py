@@ -112,7 +112,7 @@ def main_background() -> None:
     global surface
     # print(CB_MODE)
     if CB_MODE:
-        surface.fill((128, 82, 0))
+        surface.fill((255, 255, 255))
     else:
         surface.fill((128, 0, 128))
 
@@ -127,11 +127,8 @@ def start_pygame(test: bool = False) -> None:
     # -------------------------------------------------------------------------
     # Globals
     # -------------------------------------------------------------------------
-    global clock
-    global main_menu
-    global about_menu
-    global play_menu
-    global surface
+    global clock, main_menu, about_menu, play_menu, surface, CB_MODE
+
 
     # -------------------------------------------------------------------------
     # Create window
@@ -162,12 +159,14 @@ def start_pygame(test: bool = False) -> None:
     # play_submenu.add.button('Return to main menu', pygame_menu.events.RESET)
 
     play_menu.add.button('Гонщик',  # When pressing return -> play(DIFFICULTY[0], font)
-                         start_racer,
+                         start_game_with_options,
+                         'racer',
                          font_name = 'arialblack')
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
     play_menu.add.button('Космический защитник',  # When pressing return -> play(DIFFICULTY[0], font)
-                         start_space_defender,
+                         start_game_with_options,
+                         'space_defender',
                          font_name = 'arialblack')
                          # DIFFICULTY,
                          # pygame.font.Font(pygame_menu.font.FONT_FRANCHISE, 30))
@@ -283,8 +282,8 @@ def start_pygame(test: bool = False) -> None:
 #         menu = create_menu(theme_default)  # Create new menu with default theme
 def change_color(menu):
     if CB_MODE:
-        menu_color = (255, 165, 0) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
-        text_color = (0, 0, 255)
+        menu_color = (255, 228, 179) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
+        text_color = (0, 0, 224)
     else:
         menu_color = (220, 220, 220) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
         text_color = (70, 70, 70)
@@ -362,6 +361,15 @@ def synchronize_windows():
             break
 
         time.sleep(0.1)  # Sleep briefly to reduce CPU usage
+
+def start_game_with_options(game_name):
+    global CB_MODE
+    if game_name == 'racer':
+        start_racer(CB_MODE)
+    elif game_name == 'space_defender':
+        start_space_defender(CB_MODE)
+    else:
+        return
 
 if __name__ == "__main__":
 
