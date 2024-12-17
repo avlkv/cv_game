@@ -497,12 +497,11 @@ def Home_screen():
         if Game_start:
             Game_screen()
         if exitt:
-            quit()
+            return
 
 # ============================================================================
 def start_racer(CB_MODE):
     init()
-    print(f'in racer: {CB_MODE}')
     import_assets(CB_MODE)
     game_init()
     Home_screen()
