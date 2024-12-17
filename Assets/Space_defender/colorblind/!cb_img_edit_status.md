@@ -1,0 +1,7 @@
+- [ ] background.png
+- [ ] background_home.png
+- [ ] bullet.png
+- [ ] enemy.png
+- [ ] gameover.png                                                                                     
+- [ ] Icon.png
+- [ ] player.png

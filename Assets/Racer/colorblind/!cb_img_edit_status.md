@@ -1,0 +1,15 @@
+- [ ] blue_car.png                                                                                     
+- [ ] car02.png
+- [ ] car03.png
+- [ ] car04.png
+- [ ] car05.png
+- [ ] car06.png
+- [ ] car07.png
+- [ ] carcrash.png 
+- [ ] help_bk.png
+- [ ] home_background.png
+- [ ] home_bk.png
+- [ ] Icon.png
+- [ ] main_car.png
+- [ ] road4lane.png
+- [x] Road_Main.png - добавлена тень и увеличена контрастность
