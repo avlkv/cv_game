@@ -16,8 +16,8 @@ from math import sqrt, pow
 # =======================================================================================================================================
 def import_game_files(CB_MODE):
     """Returns True if all the required images and sound effect are imported and available for the game"""
-    global path, bulletImg, bulletSound, background_Game, background_home, background_over, enemy_Img, explosionSound, icon, playerImg, music
-    path = "C:\\Users\\Honor\\Documents\\cv_game\\Assets\\Space_defender\\"
+    global path, bulletImg, bulletSound, background_Game, background_home, background_over, enemy_Img, explosionSound, icon, playerImg, music, main_menu_icon
+    path = '.\\Assets\\Space_defender\\'
     try:
         # SOUNDS
         # Explosion Sounds effect
@@ -48,6 +48,8 @@ def import_game_files(CB_MODE):
         enemy_Img = pygame.image.load(join(f"{path}", 'enemy.png'))
         # Bullet
         bulletImg = pygame.image.load(join(f"{path}", 'bullet.png'))
+
+        main_menu_icon = pygame.image.load(join('.\\Assets\\', 'main_menu_icon.png'))
 
         return True
     except Exception as e:
@@ -166,7 +168,7 @@ def Home_screen():
         if start:
             Game_screen()
         if exiit:
-            return
+            exit_game()
 
 
 # =======================================================================================================================================
@@ -271,6 +273,8 @@ def Game_screen():
             music.stop()
             game_over_screen()
 
+    exit_game()
+
 
 # =======================================================================================================================================
 
@@ -312,7 +316,7 @@ def game_over_screen():
                 if exti_but_active:
                     game_over_run = False
                     music.stop()
-                    quit()
+                    exit_game()
         # =====================================================================
         pygame.display.update()
         # =====================================================================
@@ -351,6 +355,13 @@ def show_score():
         f"Level:- {level_value}", True, (255, 255, 0))
     screen.blit(level, (200, 10))
 
+
+def exit_game():
+    global main_menu_icon
+    pygame.display.set_icon(main_menu_icon)
+    pygame.display.set_caption('Главное меню')
+    pygame.display.set_mode((640, 480))
+    return
 
 # =======================================================================================================================================
 def start_space_defender(CB_MODE):

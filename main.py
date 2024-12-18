@@ -10,6 +10,7 @@ from space_defender import start_space_defender
 from cv_gesture import start_gesture_control
 import time
 import pygetwindow as gw
+from os.path import join
 
 ABOUT = [f'pygame-menu {pygame_menu.__version__}',
          f'Author: {pygame_menu.__author__}',
@@ -114,7 +115,7 @@ def main_background() -> None:
     if CB_MODE:
         surface.fill((255, 255, 255))
     else:
-        surface.fill((128, 0, 128))
+        surface.fill((101, 0, 0))
 
 
 def start_pygame(test: bool = False) -> None:
@@ -213,12 +214,16 @@ def start_pygame(test: bool = False) -> None:
     # -------------------------------------------------------------------------
     main_theme = pygame_menu.themes.THEME_DEFAULT.copy()
 
+    my_theme = pygame_menu.themes.Theme(title_background_color=(120, 120, 120),
+                title_font_shadow=True,
+                title_font='arialblack')
+
     main_menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] * 0.7,
-        theme=main_theme,
-        title='Главное меню',
-        width=WINDOW_SIZE[0] * 0.7
-    )
+            height=WINDOW_SIZE[1] * 0.7,
+            theme=my_theme,
+            title='Главное меню',
+            width=WINDOW_SIZE[0] * 0.7
+        )
 
     main_menu.add.button('Играть!', play_menu,
                          font_name = 'arialblack')
@@ -227,6 +232,13 @@ def start_pygame(test: bool = False) -> None:
 
     main_menu.add.button('Выход', pygame_menu.events.EXIT,
                          font_name = 'arialblack')
+
+    change_color(main_menu)
+    change_color(about_menu)
+    change_color(play_menu)
+
+    # Icon of the Game
+    icon = pygame.image.load(join('.\\Assets\\', 'main_menu_icon.png'))
 
     # -------------------------------------------------------------------------
     # Main loop
@@ -247,13 +259,15 @@ def start_pygame(test: bool = False) -> None:
 
         # Main menu
         if main_menu.is_enabled():
-            Screen_Widht, Screen_Height = 600, 700
-            win_size = (Screen_Widht, Screen_Height)
-            surface = surface = create_example_window('Главное меню', win_size)
+            # Screen_Width, Screen_Height = 600, 700
+            # win_size = (Screen_Width, Screen_Height)
+            surface = surface = create_example_window('Главное меню', WINDOW_SIZE)
             # pygame.display.set_caption(title)
-            # screen = pygame.display.set_mode((Screen_Widht, Screen_Height))
+            # screen = pygame.display.set_mode((Screen_Width, Screen_Height))
             # Set Caption of the Game
             pygame.display.set_caption('Главное меню')
+            # Set Icon
+            pygame.display.set_icon(icon)
             main_menu.mainloop(surface, main_background, disable_loop=test, fps_limit=FPS)
 
         # Flip surface
@@ -282,11 +296,13 @@ def start_pygame(test: bool = False) -> None:
 #         menu = create_menu(theme_default)  # Create new menu with default theme
 def change_color(menu):
     if CB_MODE:
-        menu_color = (255, 228, 179) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
+        menu_color = (255, 228, 179)
         text_color = (0, 0, 224)
     else:
-        menu_color = (220, 220, 220) # (randrange(0, 255), randrange(0, 255), randrange(0, 255))
-        text_color = (70, 70, 70)
+        menu_color = (205, 0, 0)
+        text_color = (255, 215, 0)
+        # menu_color = (220, 220, 220)
+        # text_color = (70, 70, 70)
     menu.get_scrollarea().update_area_color(menu_color)
     for widget in menu.get_widgets():
         if isinstance(widget, pygame_menu.widgets.Button) or isinstance(widget, pygame_menu.widgets.ToggleSwitch):
