@@ -198,6 +198,7 @@ def Game_screen():
 
             if event.type == KEYDOWN:  # if keystroke is pressed check whether its right or left
                 if event.key == K_ESCAPE:
+                    music.stop()
                     game_run = False
                 if event.key == K_LEFT:
                     playerX_change = (-1 * playerx_varchange)
