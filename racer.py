@@ -199,6 +199,7 @@ def Game_screen():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     Game_run_screen, home_start = False, True
+                    music.stop()
 
             if event.type == MOUSEBUTTONDOWN:          # Button's Click
                 if home_Button_button_active:
@@ -351,6 +352,7 @@ def Home_screen():
                         if event.key == K_ESCAPE:  # Press ESC to return
                             waiting = False
                             show_instructions = False
+                            music.stop()
                     if event.type == pygame.MOUSEBUTTONDOWN:  # Check for button clicks
                         if Back_but.hover(pygame.mouse.get_pos()):  # Check if Back button is clicked
                             waiting = False
@@ -366,7 +368,8 @@ def Home_screen():
             exit_game()
 
 def exit_game():
-    global main_menu_icon
+    global main_menu_icon, music
+    music.stop()
     pygame.display.set_icon(main_menu_icon)
     pygame.display.set_caption('Главное меню')
     pygame.display.set_mode((640, 480))
