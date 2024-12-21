@@ -140,9 +140,14 @@ def start_pygame(test: bool = False) -> None:
     # -------------------------------------------------------------------------
     # Create menus: Play Menu
     # -------------------------------------------------------------------------
+    my_theme = pygame_menu.themes.Theme(title_background_color=(120, 120, 120),
+                                        title_font_shadow=True,
+                                        title_font='arialblack')
+
     play_menu = pygame_menu.Menu(
         height=WINDOW_SIZE[1] * 0.7,
         title='Play Menu',
+        theme=my_theme,
         width=WINDOW_SIZE[0] * 0.75
     )
 
@@ -189,7 +194,7 @@ def start_pygame(test: bool = False) -> None:
 
     about_menu = pygame_menu.Menu(
         height=WINDOW_SIZE[1] * 0.9,
-        theme=about_theme,
+        theme=my_theme,
         title='Настройки',
         width=WINDOW_SIZE[0] * 0.9
     )
@@ -214,9 +219,7 @@ def start_pygame(test: bool = False) -> None:
     # -------------------------------------------------------------------------
     main_theme = pygame_menu.themes.THEME_DEFAULT.copy()
 
-    my_theme = pygame_menu.themes.Theme(title_background_color=(120, 120, 120),
-                title_font_shadow=True,
-                title_font='arialblack')
+
 
     main_menu = pygame_menu.Menu(
             height=WINDOW_SIZE[1] * 0.7,
