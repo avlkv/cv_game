@@ -429,11 +429,14 @@ def gesture_control():
                     if Controller_Mode == 0:
                         """Controller mode -> 0; is mouse control mode
                         Available mouse controls are Pointer movement & Left-click"""
+
+                        sensitivity_factor = 1  # Decrease for less sensitivity, increase for more sensitivity
+
                         if V_dir == 1:
                             # IF vertical direction is +ve then pointer movement will occur
-                            px, py = lm_list[8][1:]
-                            pointer_x = int(interp(px, (hand_start_x, end_x), (0, scrn_width)))
-                            pointer_y = int(interp(py, (hand_start_y, end_y), (0, scrn_height)))
+                            px, py = lm_list[8][1:] # Index finger position
+                            pointer_x = int(interp(px, (hand_start_x, end_x), (0, scrn_width)) * sensitivity_factor)
+                            pointer_y = int(interp(py, (hand_start_y, end_y), (0, scrn_height)) * sensitivity_factor)
                             # ==== Mouse Pointer Movement ==============================
                             state = "Mouse Pointer"
                             cv2.circle(Main_img, (px, py), 5, (200, 200, 200), cv2.FILLED)

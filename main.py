@@ -392,7 +392,7 @@ def start_game_with_options(game_name):
 
 if __name__ == "__main__":
 
-    open_cv = False
+    open_cv = True
     if open_cv:
         pygame_thread = threading.Thread(target=start_pygame)
         opencv_thread = threading.Thread(target=start_gesture_control)
