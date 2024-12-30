@@ -1,7 +1,7 @@
 # ===== Importing Required Modules ==========================================
 from pynput.keyboard import Controller as kc
 from pynput.keyboard import Key
-from pynput.mouse import Controller as mc
+from pynput.mouse import Controller as mc, Controller
 from pynput.mouse import Button
 import cv2  # конкретное названия
 
@@ -279,7 +279,7 @@ def gesture_control():
     Hand_detector = Hand_Controller()  # Creating hand-Detector
     # ===========================================================================
     V_dir, H_dir, Jump = 0, 0, 0
-    Controller_Mode = -1
+    Controller_Mode = 0
     # ===========================================================================
     # Setting up the fingers relted variable
     Thumb = Index_Finger = Middle_Finger = Ring_Finger = Pinky_Finger = 1
@@ -442,9 +442,18 @@ def gesture_control():
                             cv2.circle(Main_img, (px, py), 5, (200, 200, 200), cv2.FILLED)
                             cv2.circle(Main_img, (px, py), 10, (200, 200, 200), 3)
                             mouse.position = (int(pointer_x), int(pointer_y))
+
+                            # print(Index_finger_in, Pinky_Finger_in)
+
+                            if Index_Finger and Pinky_Finger:
+                                # Trigger mouse click action
+                                mouse.click(Button.left)  # Perform a left-click
+                                print("Click action triggered with index and pinky fingers up")
+
                         else:
                             # IF vertical direction is not +ve then left-click or quit-check wil happen
                             [dis, centre] = Hand_detector.findDistance(Main_img, 1, 2)
+
                             if (Index_fing_qt and Middle_fing_qt) and sum_of_finger_state <= 3:
                                 """If Index & middle finger are in quit button box,then check for click in it."""
                                 state = "Quit Check"
@@ -505,8 +514,13 @@ def gesture_control():
         cv2.putText(Main_img, f'QUIT', (start_x - 65, start_y + 30), Font_type, Font_size, Font_color, 2)
         cv2.rectangle(Main_img, (start_x - 100, start_y), (start_x, hand_start_y), (10, 10, 250), 2)
         # ======================================================================
-        type_controller = "Mouse" if Controller_Mode == 0 else 'Arrow'
-        cv2.putText(Main_img, f"Controll Type:-{type_controller}", (250, 40), Font_type, Font_size, Font_color,
+        if Controller_Mode == 0:
+            type_controller = "Mouse"
+        elif Controller_Mode == 1:
+            type_controller = "Arrow"
+        else:
+            type_controller = "None"
+        cv2.putText(Main_img, f"Control Type:-{type_controller}", (250, 40), Font_type, Font_size, Font_color,
                     Font_thickness)
         # ======= Displaying the FPS of the CV Apk =============================
         fps = 1 / (cur_time - prev_time)
