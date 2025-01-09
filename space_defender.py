@@ -67,7 +67,7 @@ def game_init():
         num_of_enemies, bulletX, bulletY, bulletX_change, bulletY_change, bullet_state, score_value, level_value, over_font
     screen = pygame.display.set_mode((800, 600))
     # Caption and Icon
-    pygame.display.set_caption('Космический защитник')
+    pygame.display.set_caption('Космический защитник - Меню')
     pygame.display.set_icon(icon)
     # =======================================================================================================================================
     # Player
@@ -192,6 +192,9 @@ def Game_screen():
     while game_run:
         screen.blit(background_Game, (0, 0))  # Background Image
         show_score()
+
+        pygame.display.set_caption('Космический защитник - Игра')
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 game_run = False

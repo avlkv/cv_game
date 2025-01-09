@@ -12,10 +12,10 @@ import time
 import pygetwindow as gw
 from os.path import join
 
-ABOUT = [f'pygame-menu {pygame_menu.__version__}',
-         f'Author: {pygame_menu.__author__}',
-         f'Email: {pygame_menu.__email__}']
-DIFFICULTY = ['EASY']
+# ABOUT = [f'pygame-menu {pygame_menu.__version__}',
+#          f'Author: {pygame_menu.__author__}',
+#          f'Email: {pygame_menu.__email__}']
+# DIFFICULTY = ['EASY']
 CB_MODE = False
 FPS = 60
 WINDOW_SIZE = (640, 480)
@@ -365,7 +365,7 @@ def synchronize_windows():
                 print('no windows')
                 break
 
-            opencv_window = gw.getWindowsWithTitle('1')[0]
+            opencv_window = gw.getWindowsWithTitle('Computer Vision')[0]
 
             # Calculate new positions for the OpenCV window
             new_x = current_pygame_window.left + current_pygame_window.width + 1  # Offset to avoid overlap
@@ -393,6 +393,7 @@ def start_game_with_options(game_name):
 if __name__ == "__main__":
 
     open_cv = True
+
     if open_cv:
         pygame_thread = threading.Thread(target=start_pygame)
         opencv_thread = threading.Thread(target=start_gesture_control)

@@ -79,9 +79,9 @@ def import_assets(CB_MODE):
         playerImg = pygame.image.load(join(
             f"{path}", "Main_car.png"))              # Player's Car Image
         road = pygame.image.load(join(
-            f"{path}", "road4lane.png"))                  # Road Image 1
+            f"{path}", "road.jpg"))                  # Road Image 1
         Road2 = pygame.image.load(join(
-            f"{path}", "road4lane.png"))                 # Road Image 1
+            f"{path}", "road.jpg"))                 # Road Image 1
         help_bk = pygame.image.load(join(
             f"{path}", "help_bk.png"))                 # Road Image 1
         # Icon of the Game
@@ -110,7 +110,7 @@ def game_init():
     Screen_Widht, Screen_Height = 700, 700
     screen = pygame.display.set_mode((Screen_Widht, Screen_Height))
     # Set Caption of the Game
-    pygame.display.set_caption('Traffic_racer_car')
+    pygame.display.set_caption('Гонщик')
 
 # ============================================================================
 
